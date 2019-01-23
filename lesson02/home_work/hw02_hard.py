@@ -32,14 +32,18 @@ date = '-2.10.3001'
 # Она устроена следующим образом — на первом этаже одна комната,
 # затем идет два этажа, на каждом из которых по две комнаты, 
 # затем идёт три этажа, на каждом из которых по три комнаты и так далее:
-#         ...
+#
+#   27  28  29  30
+#   23  24  25  26
+#   19  20  21  22
+#   15  16  17  18     ...
 #     12  13  14
 #     9   10  11
 #     6   7   8
 #       4   5
 #       2   3
 #         1
-#
+# 4*(4-1)/2
 # Эту башню решили оборудовать лифтом --- и вот задача:
 # нужно научиться по номеру комнаты определять,
 # на каком этаже она находится и какая она по счету слева на этом этаже.
@@ -54,3 +58,47 @@ date = '-2.10.3001'
 #
 # Вход: 11
 # Выход: 5 3
+import math
+
+flat = int(input('Введите номер квартиры '))
+
+#Секция - набор этажей, с одинаковым количеством квартир на этаже
+section = 0
+#Последний номер квартиры в секции
+last_max_value = 0
+
+#Ищим секцию с нашей квартирой
+while last_max_value < flat:
+    section += 1
+    last_max_value += section**2
+
+#Определяем последнюю квартиру в предыдцщей секции, для сдвигов
+step = last_max_value - section**2
+cur_floor_in_section = math.ceil((flat - step) / section)  #Нужный этаж в секции
+max_floor_prev = int(section * (section - 1) / 2) #Последний этаж предыдущей секции
+
+floor = cur_floor_in_section + max_floor_prev
+
+t_number = ((flat - step)%(section))
+number = t_number if t_number else section
+print(floor, number)
+
+
+#Рисовалка башни для проверки
+# section = 0
+# last_max_value = 0
+# last_flat = 1
+# f = 0
+# _floor = 1
+# print([1])
+# while last_max_value < flat:
+#     section += 1
+#     f = last_max_value + 1
+#     while last_max_value + section**2 > f:
+#         _floor += 1
+#         print(_floor, '|', list(range(f, f + section)))
+#         f += section
+#
+#
+#     last_max_value += section**2
+
