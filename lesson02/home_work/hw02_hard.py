@@ -1,9 +1,33 @@
 # Задание-1: уравнение прямой вида y = kx + b задано в виде строки.
 # Определить координату y точки с заданной координатой x.
-
+print('Задача 1')
 equation = 'y = -12x + 11111140.2121'
 x = 2.5
 # вычислите и выведите y
+
+e_list = equation.split()
+if e_list[0] == 'y' and e_list[1] == '=' and e_list[2].endswith('x'):
+    #Вычисляем k
+    if e_list[2] == '-x':
+        k = -1
+    elif e_list[2] == 'x':
+        k = 1
+    else:
+        k = float(e_list[2][:-1])
+
+    #Вычисляем b
+    if len(e_list) > 5:
+        print('Неверный формат')
+    elif len(e_list) < 5:
+        b = 0
+    else:
+        b = float(e_list[4].replace(',', '.'))
+
+    #Результат
+    print(k * x + b)
+else:
+    print('Неверный формат')
+
 
 
 # Задание-2: Дата задана в виде строки формата 'dd.mm.yyyy'.
@@ -17,12 +41,42 @@ x = 2.5
 #  (т.е. 2 символа для дня, 2 - для месяца, 4 - для года)
 
 # Пример корректной даты
-date = '01.11.1985'
+# date = '01.11.1985'
 
 # Примеры некорректных дат
-date = '01.22.1001'
-date = '1.12.1001'
-date = '-2.10.3001'
+# date = '01.22.1001'
+# date = '1.12.1001'
+# date = '-2.10.3001'
+import re
+
+print('Задача 2')
+# Функция используется во второй задаче normal
+def date_is_correct(date):
+    pattern = '^[0-3][0-9][.][0-1][0-9][.][0-9][0-9][0-9][0-9]$'
+    month_count_day = (31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31)
+
+    # Проверка формата
+    if re.match(pattern, date) != None:
+        day = int(date.split('.')[0])
+        month = int(date.split('.')[1])
+        year = int(date.split('.')[2])
+
+        # Проверка месяца
+        if month in range(1, 13):
+            max_day_by_month = month_count_day[month - 1] + 1
+            # проверка на высокосный год
+            max_day_by_month += year % 4 == 0  and month == 2 if 1 else 0
+            if day in range(1, max_day_by_month):
+                return True, 'Дата корректна', day, month, year
+            else:
+                return False, 'Неверный день'
+        else:
+            return False, 'Неверный месяц'
+    else:
+        return False, 'Неверный формат даты'
+
+
+print(date_is_correct(input('Введите дату в формате dd.mm.yyyy '))[1])
 
 
 # Задание-3: "Перевёрнутая башня" (Задача олимпиадного уровня)
@@ -60,6 +114,7 @@ date = '-2.10.3001'
 # Выход: 5 3
 import math
 
+print('Задача 3')
 flat = int(input('Введите номер квартиры '))
 
 #Секция - набор этажей, с одинаковым количеством квартир на этаже
